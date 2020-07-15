@@ -1,0 +1,14 @@
+name: ntrk_mutations
+channels:
+  - openeye
+  - rdkit
+  - conda-forge
+dependencies:
+  - python>=3.6
+  - jupyterlab
+  - openeye-toolkits
+  - pandas
+  - requests
+  - rdkit
+  - pip:
+      - git+https://github.com/volkamerlab/dockin.git

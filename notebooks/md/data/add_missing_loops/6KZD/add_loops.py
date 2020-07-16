@@ -5,7 +5,7 @@ log.verbose()
 env = environ()
 
 # directories for input atom files
-env.io.atom_files_directory = ['.', '../../data']
+env.io.atom_files_directory = ['.', '../structures_from_docking']
 
 a = dope_loopmodel(
     env,

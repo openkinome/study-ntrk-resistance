@@ -5,13 +5,13 @@ log.verbose()
 env = environ()
 
 # directories for input atom files
-env.io.atom_files_directory = ['.', '../../data']
+env.io.atom_files_directory = ['.', '../structures_from_docking']
 
 a = dope_loopmodel(
     env,
     alnfile = 'alignment.ali',
-    knowns = '4AT3_protein',
-    sequence = '4AT3_fill',
+    knowns = '4YNE_protein',
+    sequence = '4YNE_fill',
     loop_assess_methods=(assess.DOPE, assess.GA341))
 
 a.starting_model= 1

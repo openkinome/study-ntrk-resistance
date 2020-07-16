@@ -1,5 +1,8 @@
 # PyCharm
 .idea/*
 
+# VSCode
+.DS_Store
+
 # Jupyter Notebooks
 notebooks/docking/.ipynb_checkpoints/*

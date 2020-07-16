@@ -3,6 +3,7 @@
 
 # VSCode
 .DS_Store
+.vscode/*
 
 # Jupyter Notebooks
 notebooks/docking/.ipynb_checkpoints/*

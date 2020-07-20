@@ -38,7 +38,7 @@ remove_cm_motion = True
 collision_rate = 1.0 / unit.picoseconds
 timestep = 0.002 * unit.picoseconds
 solvent_padding = 10.0 * unit.angstrom
-ionic_strength = 100 * unit.millimolar
+ionic_strength = 150 * unit.millimolar
 
 # Forcefield
 protein_forcefield = "amber14/protein.ff14SB.xml"

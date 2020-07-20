@@ -9,7 +9,6 @@ import parmed
 import simtk.openmm as mm
 import simtk.openmm.app as app
 import simtk.unit as unit
-from mdtraj.reporters import DCDReporter
 from openforcefield.topology import Molecule, Topology
 from openmmforcefields.generators import SystemGenerator
 from perses.utils.openeye import OEMol_to_omm_ff, createOEMolFromSDF
@@ -68,7 +67,7 @@ state_xml_filename = "equilibrated_state_5ns.xml"
 state_pdb_filename = "equilibrated_state_5ns.pdb"
 system_xml_filename = "equilibrated_system_5ns.xml"
 checkpoint_filename = "equilibrated_checkpoint_5ns.chk"
-traj_output_filename = "equilibrated_traj_5ns.dcd"
+traj_output_filename = "equilibrated_traj_5ns.xtc"
 
 # Define the barostat for the system
 barostat = mm.MonteCarloBarostat(pressure, temperature)
@@ -203,7 +202,7 @@ sim.reporters.append(
 
 # Write out the trajectory
 sim.reporters.append(
-    md.reporters.DCDReporter(
+    md.reporters.XTCReporter(
         file=os.path.join(output_prefix, traj_output_filename), reportInterval=traj_freq
     )
 )

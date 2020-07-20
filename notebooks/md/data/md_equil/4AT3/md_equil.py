@@ -54,13 +54,13 @@ chk_freq = 500
 traj_freq = 1000  # 2500 frames
 
 # Set the input file names
-input_pdb = "4YNE_prepped.pdb"
-input_ligands_sdf = "../../structures_from_docking/4YNE_hybrid_docking.sdf"
+input_pdb = "4AT3_prepped.pdb"
+input_ligands_sdf = "../../structures_from_docking/4AT3_hybrid_docking.sdf"
 
 # Create output directory
 output_prefix = "./output/" + chosen_ligand
 os.makedirs(output_prefix, exist_ok=True)
-print("Directory ", output_prefix, " Created ")
+print("--> Directory ", output_prefix, " created ")
 
 # Set file names
 integrator_xml_filename = "integrator_2fs.xml"
@@ -209,7 +209,7 @@ sim.reporters.append(
 )
 
 # Run NPT dynamics
-print("--> Running dynamics in the NPT ensemble for the 4YNE:" + chosen_ligand + " complex")
+print("--> Running dynamics in the NPT ensemble for the 4AT3:" + chosen_ligand + " complex")
 sim.step(nsteps)
 
 # Save and serialize the final state

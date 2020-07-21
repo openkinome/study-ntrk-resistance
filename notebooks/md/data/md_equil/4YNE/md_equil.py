@@ -67,7 +67,7 @@ state_xml_filename = "equilibrated_state_5ns.xml"
 state_pdb_filename = "equilibrated_state_5ns.pdb"
 system_xml_filename = "equilibrated_system_5ns.xml"
 checkpoint_filename = "equilibrated_checkpoint_5ns.chk"
-traj_output_filename = "equilibrated_traj_5.xtc"
+traj_output_filename = "equilibrated_traj_5ns.xtc"
 
 # Define the barostat for the system
 barostat = mm.MonteCarloBarostat(pressure, temperature)

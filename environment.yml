@@ -6,6 +6,9 @@ channels:
 dependencies:
   - python>=3.6
   - jupyterlab
+  - matplotlib
+  - mdanalysis
+  - nglview
   - openeye-toolkits
   - pandas
   - requests

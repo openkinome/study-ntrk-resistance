@@ -4,6 +4,11 @@
 # VSCode
 .DS_Store
 .vscode/*
+notebooks/**/default.profraw
 
 # Jupyter Notebooks
 notebooks/docking/.ipynb_checkpoints/*
+
+# Trajectory files
+notebooks/**/*.xtc
+notebooks/**/*.npz

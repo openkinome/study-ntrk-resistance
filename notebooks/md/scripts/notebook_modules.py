@@ -1,11 +1,10 @@
-import MDAnalysis as mda
-import MDAnalysis.analysis.rms
-import MDAnalysis.transformations as trans
 import matplotlib.patheffects as mpe
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-import seaborn as sns
+
+import MDAnalysis as mda
+import MDAnalysis.analysis.rms
+import MDAnalysis.transformations as trans
 
 # Check here for good CB safe palettes: https://venngage.com/blog/color-blind-friendly-palette/
 cb_colour_cycle = [
@@ -13,6 +12,68 @@ cb_colour_cycle = [
     (169, 90, 161),  # purple
     (133, 192, 249),  # light blue
 ]
+
+
+def centre_protein_gh(dict_of_systs, wrap=False, cent="geometry"):
+
+    # The GroupHug class was created by Richard Gowers (https://github.com/richardjgowers)
+    # in response to this question on the MDAnalysis forum:
+    # https://groups.google.com/forum/#!topic/mdnalysis-discussion/umDpvbCmQiE
+
+    class GroupHug:
+        def __init__(self, center, *others):
+            self.c = center
+            self.o = others
+
+        @staticmethod
+        def calc_restoring_vec(ag1, ag2):
+            box = ag1.dimensions[:3]
+            dist = ag1.center_of_mass() - ag2.center_of_mass()
+
+            return box * np.rint(dist / box)
+
+        def __call__(self, ts):
+            # loop over other atomgroups and shunt them into nearest image to center
+            for i in self.o:
+                rvec = self.calc_restoring_vec(self.c, i)
+
+                i.translate(+rvec)
+
+            return ts
+
+    # Centre the protein in the box using MDAnalysis
+    for ligand_name, syst in dict_of_systs.items():
+        u = dict_of_systs[ligand_name]
+        ligand_resname = ligand_name[:3]
+        print(ligand_resname)
+
+        if ligand_resname == "lar":
+            print("WARNING: This script should only be used for the NTRK3 6KZD system!")
+
+        # hard code the protein chains for now -> only for 6KZD model
+        chainA = u.select_atoms("resid 527-627")
+        chainB = u.select_atoms("resid 648-713")
+        chainC = u.select_atoms("resid 728-838")
+        lig = u.select_atoms("resname " + ligand_resname)
+        ions = u.select_atoms("resname NA CL")
+
+        protein = u.select_atoms("protein or resname ACE NME")
+        reference = u.copy().select_atoms("protein or resname ACE NME")
+        not_protein = u.select_atoms("not protein and not resname ACE NME")
+        protein_and_lig = u.select_atoms("protein or resname ACE NME " + ligand_resname)
+
+        transforms = [
+            trans.unwrap(protein),
+            trans.unwrap(lig),
+            GroupHug(chainA, chainB, chainC, lig),
+            trans.center_in_box(protein_and_lig, wrap=wrap, center="geometry"),
+            trans.wrap(ions),
+            trans.fit_rot_trans(protein, reference),
+        ]
+
+        dict_of_systs[ligand_name].trajectory.add_transformations(*transforms)
+
+    return dict_of_systs
 
 
 def centre_protein(dict_of_systs, wrap=False, cent="geometry"):
@@ -55,13 +116,6 @@ def calc_rmsd(name, dict_of_systs, skip=10):
             groupselections=["backbone"],
         )  # whole protein
 
-        # "backbone and resid 554-566" # C-Helix
-        # "backbone and resid 668-670" # DFG motif
-        # "backbone and resid 517-522" # Glycine loop
-        # "backbone and resid 544-560" # Conserved lysine, glutamate
-        # "backbone and resid 648-650" # HRD motif
-        # "backbone and resid 668-694" # Activation loop
-
         R.run(step=skip)
         rmsd_store.append(R)
 
@@ -77,9 +131,7 @@ def calc_rmsd(name, dict_of_systs, skip=10):
         col = tuple(round(c / 255, 2) for c in cb_colour_cycle[i])
 
         rmsd = rmsd_store[i].rmsd.T  # transpose makes it easier for plotting
-        ax.plot(
-            time, rmsd[2], color=col, label=name + ":" + syst, alpha=0.8
-        )
+        ax.plot(time, rmsd[2], color=col, label=name + ":" + syst, alpha=0.8)
 
     ax.legend(loc="best")
     ax.set_xlabel("Time (ns)", fontsize=14)
@@ -132,7 +184,14 @@ def delta_cog_inhib(name, dict_of_systs, skip=None, hist=False, save=False, **kw
         time = inhib_store[syst]["time"]
 
         if hist:
-            ax.hist(cog, density=True, bins=100, color=col, label=name + ":" + syst, alpha=0.8)
+            ax.hist(
+                cog,
+                density=True,
+                bins=100,
+                color=col,
+                label=name + ":" + syst,
+                alpha=0.8,
+            )
         else:
             ax.plot(time, cog, color=col, label=name + ":" + syst, alpha=0.8)
 

@@ -19,6 +19,11 @@ With the code and notebooks of this repository we aim to explore the impact of p
 - `notebooks/docking/docking.ipynb`  
   - jupyter notebook explaining how NTRK structures were prepared and how docking poses were generated
 
+- `notebooks/md_sims/md.ipynb`  
+  - jupyter notebook analysing results from MD simulations of systems prepared with docking.
+
+
+
 ### Authors
 
 - David Schaller <david.schaller@charite.de>

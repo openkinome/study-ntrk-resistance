@@ -13,3 +13,5 @@ A total of 200 models were created using [Modeller](https://salilab.org/modeller
 - [x] NTRK1: `4YNE` (best model = `4YNE_fill.BL01040001.pdb`)
 - [x] NTRK2: `4AT3` (best model = `4AT3_fill.BL00850001.pdb`)
 - [ ] NTRK3: `6KZD` (best model = N/A)
+
+The output of loop building are present in `.tar.gz` files within each directory.

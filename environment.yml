@@ -9,6 +9,7 @@ dependencies:
   - matplotlib
   - mdanalysis
   - nglview
+  - numpy
   - openeye-toolkits
   - pandas
   - requests

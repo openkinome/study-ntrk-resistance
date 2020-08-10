@@ -1,5 +1,14 @@
 # PyCharm
 .idea/*
 
+# VSCode
+./**/*.DS_Store
+.vscode/*
+./**/default.profraw
+
 # Jupyter Notebooks
 notebooks/docking/.ipynb_checkpoints/*
+
+# Trajectory files
+./**/*.xtc
+./**/*.npz

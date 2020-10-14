@@ -18,7 +18,7 @@ With the code and notebooks of this repository we aim to explore the impact of p
   [Drilon et al. 2018](https://www.doi.org/10.1158/2159-8290.CD-18-0484)
 - `notebooks/docking/docking.ipynb`  
   - jupyter notebook explaining how NTRK structures were prepared and how docking poses were generated
-- `notebooks/kinoml_modeling/NTRK1_complex_modeling.ipynb.ipynb`  
+- `notebooks/kinoml_modeling/NTRK1_complex_modeling.ipynb`  
   - jupyter notebook explaining how NTRK structures can automatically be prepared using KinoML
 - `notebooks/md_sims/md.ipynb`  
   - jupyter notebook analysing results from MD simulations of systems prepared with docking.

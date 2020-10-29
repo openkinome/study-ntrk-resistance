@@ -168,7 +168,6 @@ for index, row in df_i.iterrows():
     oechem.OEAssignHybridization(mol)
     oechem.OEAddExplicitHydrogens(mol)
     oechem.OEPerceiveChiral(mol)
-    mol_list = [mol]
 
     # make the system
     solvent_delivery = PointMutationExecutor(
@@ -176,7 +175,7 @@ for index, row in df_i.iterrows():
         "1",  # First and only protein chain
         resid,
         mutate_to,
-        ligand_input=mol_list,
+        ligand_input=mol,
         ionic_strength=0.15 * unit.molar,
         small_molecule_forcefields=args.small_mol_ff,
     )

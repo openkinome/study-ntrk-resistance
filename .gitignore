@@ -12,3 +12,6 @@ notebooks/docking/.ipynb_checkpoints/*
 # Trajectory files
 ./**/*.xtc
 ./**/*.npz
+
+# PNG files
+./**/*.png

@@ -11,6 +11,8 @@ from openmmtools.integrators import PeriodicNonequilibriumIntegrator
 from simtk import openmm, unit
 from simtk.openmm import XmlSerializer
 
+from openeye import oechem
+
 # Set up logger
 _logger = logging.getLogger()
 _logger.setLevel(logging.INFO)

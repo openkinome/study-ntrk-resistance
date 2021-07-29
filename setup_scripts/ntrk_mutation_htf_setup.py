@@ -15,7 +15,7 @@ from perses.utils.openeye import generate_unique_atom_names
 from simtk import unit
 
 parser = argparse.ArgumentParser(
-    description="Prepare hybrid topologies for NTRK mutant systems with flattened torsions"
+    description="Prepare hybrid topologies for NTRK mutant systems"
 )
 parser.add_argument(
     "--index", dest="index", type=int, help="an integer for the system to create"
@@ -45,6 +45,21 @@ parser.add_argument(
     default="openff-1.3.0",
     help="the forcefield to use for the small molecule",
 )
+parser.add_argument(
+    "--output_path_warning",
+    dest="output_path_warning",
+    type=bool,
+    default=True,
+    help="set to False to supress warning that output path already exists. Default = True"
+)
+parser.add_argument(
+    "--flatten_torsions",
+    dest="flatten_torsions",
+    type=bool,
+    default=True,
+    help="specify whether to flatten torisons at the end states. Default = True"
+)
+
 args = parser.parse_args()
 
 
@@ -99,13 +114,15 @@ df_i = df[df["ntrk"] == index_dict[i][0]]
 data_path = args.data_path
 out_path = args.output_path
 
+# check for warnings
+output_path_warning = args.output_path_warning
+
 # check mutations output directory doesn't exist
-out_dir = f"{out_path}mutations_htf_output/flattened_torsions/"
+out_dir = f"{out_path}mutations_htf_output/"
 print(f"Using {out_path} as the output directory...")
+
 if not os.path.exists(out_dir):
     os.makedirs(out_dir)
-else:
-    sys.exit(f"{out_path}mutations_htf_output/ already exists! Exiting.")
 
 # set three letter to one letter amino acid dictionary
 aa = {
@@ -150,38 +167,49 @@ for index, row in df_i.iterrows():
 
     # Create protein directory
     output_prefix_protein = (
-        f"{out_path}mutations_htf_output/flattened_torsions/{protein_name}"
+        f"{out_path}mutations_htf_output/{protein_name}"
     )
     if not os.path.exists(output_prefix_protein):
         os.makedirs(output_prefix_protein)
         print(f"--> Directory {output_prefix_protein} created")
-
-    # Create protein mutant directory
-    output_prefix_mutant = f"{out_path}mutations_htf_output/flattened_torsions/{protein_name}/{aa[mutate_from]}{resid}{aa[mutate_to]}"
-    if not os.path.exists(output_prefix_mutant):
-        os.makedirs(output_prefix_mutant)
-        print(f"--> Directory {output_prefix_mutant} created")
-
+    
     protein_file = (
         f"{data_path}{htf_input_prefix}{protein_name}_{ligand_name}_protein.pdb"
     )
     ligand_file = (
         f"{data_path}{htf_input_prefix}{protein_name}_{ligand_name}_ligand.sdf"
     )
-    print(f"Using protein file: {protein_file}")
-    print(f"Using ligand file: {ligand_file}")
 
-    # create oemol object for NTRK ligands due to issues with stereochemistry - DEPRECATED
-    # ifs = oechem.oemolistream()
-    # ifs.open(ligand_file)
-    # mol_list = [oechem.OEMol(mol) for mol in ifs.GetOEMols()]
-    # mol = mol_list[0]
-    # if len([atom.GetName() for atom in mol.GetAtoms()]) > len(set([atom.GetName() for atom in mol.GetAtoms()])):
-    #         mol = generate_unique_atom_names(mol)
-    # oechem.OEAssignAromaticFlags(mol, oechem.OEAroModelOpenEye)
-    # oechem.OEAssignHybridization(mol)
-    # oechem.OEAddExplicitHydrogens(mol)
-    # oechem.OEPerceiveChiral(mol)
+    # Check if we have both the appropriate protein and ligand file
+    if os.path.exists(protein_file) and os.path.exists(ligand_file):
+        print(f"Using protein file: {protein_file}")
+        print(f"Using ligand file: {ligand_file}")
+    else:
+        print(f"Couldn't find either {protein_file} or {ligand_file}, skipping...")
+        continue
+
+    # If we have the necessary files, create protein mutant directory
+    output_prefix_mutant = f"{out_path}mutations_htf_output/{protein_name}/{aa[mutate_from]}{resid}{aa[mutate_to]}"
+
+    if not os.path.exists(output_prefix_mutant):
+        os.makedirs(output_prefix_mutant)
+        print(f"--> Directory {output_prefix_mutant} created")
+
+
+    # create oemol object for NTRK ligands due to issues with stereochemistry
+    #ifs = oechem.oemolistream()
+    #ifs.open(ligand_file)
+    #mol_list = [oechem.OEMol(mol) for mol in ifs.GetOEMols()]
+    #mol = mol_list[0]
+    #if len([atom.GetName() for atom in mol.GetAtoms()]) > len(set([atom.GetName() for atom in mol.GetAtoms()])):
+    #    mol = generate_unique_atom_names(mol)
+    #oechem.OEAssignAromaticFlags(mol, oechem.OEAroModelOpenEye)
+    #oechem.OEAssignHybridization(mol)
+    #oechem.OEAddExplicitHydrogens(mol)
+    #oechem.OEPerceiveChiral(mol)
+
+    #print("here")
+    #print(mol)
 
     # make the system
     solvent_delivery = PointMutationExecutor(
@@ -189,11 +217,11 @@ for index, row in df_i.iterrows():
         "1",  # First and only protein chain
         resid,
         mutate_to,
-        ligand_file=ligand_file,
-        allow_undefined_stereo=True,
+        ligand_input=ligand_file,
+        allow_undefined_stereo_sdf=True,
         ionic_strength=0.15 * unit.molar,
         small_molecule_forcefields=args.small_mol_ff,
-        flatten_torsions=True,  # we're using flattened torsions
+        flatten_torsions=args.flatten_torsions,
         flatten_exceptions=True,
         conduct_endstate_validation=False,
     )

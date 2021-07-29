@@ -2,16 +2,16 @@
 .idea/*
 
 # VSCode
-./**/*.DS_Store
+**/*.DS_Store
 .vscode/*
-./**/default.profraw
+**/default.profraw
 
 # Jupyter Notebooks
 notebooks/docking/.ipynb_checkpoints/*
 
 # Trajectory files
-./**/*.xtc
-./**/*.npz
+**/*.xtc
+**/*.npz
 
 # PNG files
-./**/*.png
+**/*.png

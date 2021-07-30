@@ -22,7 +22,9 @@ With the code and notebooks of this repository we aim to explore the impact of p
   - jupyter notebook explaining how NTRK structures can automatically be prepared using KinoML
 - `notebooks/md_sims/md.ipynb`  
   - jupyter notebook analysing results from MD simulations of systems prepared with docking.
-
+- `notebooks/free_energy_calculations/`  
+  - `analyse_ntrk1_perses_rego_sora.ipynb`: jupyter notebook analysing prospective free energy calcualtion results.
+  - `analyse_ntrk1_perses.ipynb`: jupyter notebook analysing retrospective free energy calcualtion results.
 
 
 ### Authors

@@ -1,0 +1,5 @@
+ntrk,tki,SMILES,mutation,resid,from,to,IC50,DOI
+NTRK1,regorafenib,CNC(=O)c1cc(Oc2ccc(NC(=O)Nc3ccc(Cl)c(C(F)(F)F)c3)c(F)c2)ccn1,G595R,595,GLY,ARG,,
+NTRK1,regorafenib,CNC(=O)c1cc(Oc2ccc(NC(=O)Nc3ccc(Cl)c(C(F)(F)F)c3)c(F)c2)ccn1,G667C,667,GLY,CYS,,
+NTRK1,sorafenib,CNC(=O)c1cc(Oc2ccc(NC(=O)Nc3ccc(Cl)c(C(F)(F)F)c3)cc2)ccn1,G595R,595,GLY,ARG,,
+NTRK1,sorafenib,CNC(=O)c1cc(Oc2ccc(NC(=O)Nc3ccc(Cl)c(C(F)(F)F)c3)cc2)ccn1,G667C,667,GLY,CYS,,
